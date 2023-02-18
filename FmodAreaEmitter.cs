@@ -73,7 +73,7 @@ public class FmodAreaEmitter : MonoBehaviour
     private void FixedUpdate()
     {
         FindPointForEmitter();
-        if (distanceToPlayer > maxDistance || distanceToPlayer < 0)
+        if (distanceToPlayer > maxDistance || distanceToPlayer < 0)                 //When Player is too far, there is no point for further calculations
             return;
 
         AttachSoundToEmitter();
@@ -81,11 +81,11 @@ public class FmodAreaEmitter : MonoBehaviour
 
     private void FindPointForEmitter()
     {
-        if (isPlayerInside)
+        if (isPlayerInside)         //When Player is inside, collider we want sounds to be played as 2D events
         {
             emitterPoint = player.transform.position;
         }
-        else
+        else                        //When we are outside, audio will behave like 3D source for which we shall provide a position that will be feeling more natural especially for large areas - the closest point between player and area
         {
             if (useChildColliders)
                 GetDistanceToChildColliders();
@@ -131,8 +131,7 @@ public class FmodAreaEmitter : MonoBehaviour
             Vector3 newpoint = edge.ClosestPoint(player.transform.position);
             y = Vector3.Distance(newpoint, player.transform.position);
 
-            if (x > y)
-            {
+            if (x > y)      {
                 newclosestpoint = newpoint;
                 x = y;
             }
@@ -142,7 +141,7 @@ public class FmodAreaEmitter : MonoBehaviour
         distanceToPlayer = x;
     }
 
-    private void AttachSoundToEmitter()                             //
+    private void AttachSoundToEmitter()                             //The in case you would use this script for other needs than FMOD's positioning, this is function you will personalize
     {
         AmbientEmitter.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(emitterPoint)); 
     }
