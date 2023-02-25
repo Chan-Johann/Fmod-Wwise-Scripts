@@ -23,6 +23,10 @@ public class TerrainTextureFinder : MonoBehaviour
                     return surfaceName;        
                 }
             }
+            if (hit.transform.GetComponent<SurfaceType>() != null)
+            {
+                return hit.transform.GetComponent<SurfaceType>().surfaceType.soundMaterial; //this checks for the SurfaceType script containing string "soundMaterial" for what I used Scriptable Object
+            }
         }
 
         ChangeFootstepSurface();                    //In situation when script for some reason won't find any terrain or texture, it will keep the previous value or use default one
@@ -71,12 +75,13 @@ public class TerrainTextureFinder : MonoBehaviour
 
         switch (currentSurfaceLayer)
         {
-            case "FAE_Dirt":
+            //cases depends on the names you use for textures and parameters
+            case "T_Dirt":
                 {
                     surfaceName = "Dirt";
                     break;
                 }
-            case "FAE_Grass":
+            case "T_Grass":
                 {
                     surfaceName = "Grass";
                     break;
