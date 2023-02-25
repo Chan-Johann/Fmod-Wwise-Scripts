@@ -5,7 +5,7 @@ using UnityEngine;
 public class TerrainTextureFinder : MonoBehaviour 
 {
     private string currentSurfaceLayer;
-    private string fmodSurfaceName;
+    private string surfaceName;
 
     public string CheckLayers(Vector3 playerPos)
     {
@@ -20,13 +20,13 @@ public class TerrainTextureFinder : MonoBehaviour
                     currentSurfaceLayer = GetLayerName(transform.position, t);
 
                     ChangeFootstepSurface();        //This function will 'translate' the names of textures used by graphic team, into names we actually will use further as parameter names or values depending on need
-                    return fmodSurfaceName;        
+                    return surfaceName;        
                 }
             }
         }
 
         ChangeFootstepSurface();                    //In situation when script for some reason won't find any terrain or texture, it will keep the previous value or use default one
-        return fmodSurfaceName;
+        return surfaceName;
     }
 
     private string GetLayerName(Vector3 playerPos, Terrain t)
@@ -73,17 +73,17 @@ public class TerrainTextureFinder : MonoBehaviour
         {
             case "FAE_Dirt":
                 {
-                    fmodSurfaceName = "Dirt";
+                    surfaceName = "Dirt";
                     break;
                 }
             case "FAE_Grass":
                 {
-                    fmodSurfaceName = "Grass";
+                    surfaceName = "Grass";
                     break;
                 }
             default:
                 {
-                    fmodSurfaceName = "Default";
+                    surfaceName = "Default";
                     break;
                 }
         }
