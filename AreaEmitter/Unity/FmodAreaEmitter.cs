@@ -26,7 +26,7 @@ public class FmodAreaEmitter : MonoBehaviour
     private EventDescription AudioDes;
     private float maxDistance;
 
-    #region MonoBehaviour
+    #region Event Functions
     private void Awake()
     {   //In Awake script checks if it has neccesary objects to be operational, in other case it will disable itself                                            
         //it looks for Player (NOT CORRECT IF YOUR LISTENER POSITION IS NOT ON PLAYER) and collider/child colliders (depending on your use of single or multiple colliders in more complex shapes)
