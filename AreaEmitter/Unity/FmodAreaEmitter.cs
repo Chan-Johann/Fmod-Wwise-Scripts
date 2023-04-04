@@ -26,34 +26,35 @@ public class FmodAreaEmitter : MonoBehaviour
     private EventDescription AudioDes;
     private float maxDistance;
 
-    #region Event Functions
+    #region MonoBehaviour
     private void Awake()
     {   //In Awake script checks if it has neccesary objects to be operational, in other case it will disable itself                                            
         //it looks for Player (NOT CORRECT IF YOUR LISTENER POSITION IS NOT ON PLAYER) and collider/child colliders (depending on your use of single or multiple colliders in more complex shapes)
 
-        if (player == null)             {
+        if (player == null) {
             player = GameObject.FindGameObjectWithTag("Player");
 
-            if (player == null)             {
+            if (player == null) {
                 Debug.LogWarning("FMOD Area Emitter could not detect a player. Will be disabled now.");
-                this.GetComponent<FmodAreaEmitter>().enabled = !this.GetComponent<FmodAreaEmitter>().enabled;
+                GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
             }
         }
 
-        if (useChildColliders)          {
-            emitersChildColliders = this.GetComponentsInChildren<Collider>();
+        if (useChildColliders)  {
+            emitersChildColliders = GetComponentsInChildren<Collider>();
 
-            if (emitersChildColliders == null)     {
+            if (emitersChildColliders == null)  {
                 Debug.LogWarning("FMOD Area Emitter could not detect a colliders on object. Will be disabled now.");
-                this.GetComponent<FmodAreaEmitter>().enabled = !this.GetComponent<FmodAreaEmitter>().enabled;
+                GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
+            }
+            if (TryGetComponent<Rigidbody>(out Rigidbody x) == false)   {
+                Debug.LogWarning("FMOD Area Emitter could not detect a Rigidbody on object. It will work fine, yet add it for better performance while being inside area.");
             }
         }
-        else if (emitterCollider == null)  {
-            emitterCollider = this.GetComponent<Collider>();
-
-            if (emitterCollider == null)       {
+        else if (emitterCollider == null)   {
+            if(TryGetComponent<Collider>(out emitterCollider) == false) {
                 Debug.LogWarning("FMOD Area Emitter could not detect a colliders on object. Will be disabled now.");
-                this.GetComponent<FmodAreaEmitter>().enabled = !this.GetComponent<FmodAreaEmitter>().enabled;
+                GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
             }
         }
     }
