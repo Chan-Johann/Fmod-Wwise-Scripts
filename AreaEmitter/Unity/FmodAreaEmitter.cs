@@ -15,10 +15,9 @@ public class FmodAreaEmitter : MonoBehaviour
     [SerializeField] private bool useChildColliders;
     [SerializeField] private Collider[] emitersChildColliders;
 
-    private bool isPlayerInside;
     private float distanceToPlayer;
 
-    private Vector3 closestPoint;                                  
+    private Vector3 closestPoint;
     private Vector3 emitterPoint;
     private Vector3 playerPosition;
 
@@ -31,28 +30,34 @@ public class FmodAreaEmitter : MonoBehaviour
     {   //In Awake script checks if it has neccesary objects to be operational, in other case it will disable itself                                            
         //it looks for Player (NOT CORRECT IF YOUR LISTENER POSITION IS NOT ON PLAYER) and collider/child colliders (depending on your use of single or multiple colliders in more complex shapes)
 
-        if (player == null) {
+        if (player == null)
+        {
             player = GameObject.FindGameObjectWithTag("Player");
 
-            if (player == null) {
+            if (player == null)
+            {
                 Debug.LogWarning("FMOD Area Emitter could not detect a player. Will be disabled now.");
                 GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
             }
         }
-
-        if (useChildColliders)  {
+        if (useChildColliders)
+        {
             emitersChildColliders = GetComponentsInChildren<Collider>();
 
-            if (emitersChildColliders == null)  {
+            if (emitersChildColliders == null)
+            {
                 Debug.LogWarning("FMOD Area Emitter could not detect a colliders on object. Will be disabled now.");
                 GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
             }
-            if (TryGetComponent<Rigidbody>(out Rigidbody x) == false)   {
+            if (TryGetComponent<Rigidbody>(out Rigidbody x) == false)
+            {
                 Debug.LogWarning("FMOD Area Emitter could not detect a Rigidbody on object. It will work fine, yet add it for better performance while being inside area.");
             }
         }
-        else if (emitterCollider == null)   {
-            if(TryGetComponent<Collider>(out emitterCollider) == false) {
+        else if (emitterCollider == null)
+        {
+            if (TryGetComponent<Collider>(out emitterCollider) == false)
+            {
                 Debug.LogWarning("FMOD Area Emitter could not detect a colliders on object. Will be disabled now.");
                 GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
             }
@@ -89,35 +94,14 @@ public class FmodAreaEmitter : MonoBehaviour
     }
     #endregion
 
-    #region Trigger
-    private void OnTriggerEnter(Collider other)
+    private void FindPointForEmitter() //audio will behave like 3D source for which we shall provide a position that will be feeling more natural especially for large areas - the closest point between player and area
     {
-        if (other.tag == "Player")
-            isPlayerInside = true;
-    }
+        if (useChildColliders)
+            GetDistanceToChildColliders();
+        else
+            GetDistanceToCollider();
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player")
-            isPlayerInside = false;
-    }
-    #endregion
-
-    private void FindPointForEmitter()
-    {
-        if (isPlayerInside)         //When Player is inside, collider we want sounds to be played as 2D events - which is 3D one attached to the listener position
-        {
-            emitterPoint = playerPosition;
-        }
-        else                        //When we are outside, audio will behave like 3D source for which we shall provide a position that will be feeling more natural especially for large areas - the closest point between player and area
-        {
-            if (useChildColliders)
-                GetDistanceToChildColliders();
-            else
-                GetDistanceToCollider();
-
-            emitterPoint = closestPoint;
-        }
+        emitterPoint = closestPoint;
     }
 
     private void GetDistanceToCollider()
@@ -137,7 +121,8 @@ public class FmodAreaEmitter : MonoBehaviour
             Vector3 newPoint = edge.ClosestPoint(playerPosition);
             y = Vector3.Distance(newPoint, playerPosition);
 
-            if (x > y)      {
+            if (x > y)
+            {
                 newClosestPoint = newPoint;
                 x = y;
             }
@@ -147,9 +132,9 @@ public class FmodAreaEmitter : MonoBehaviour
         distanceToPlayer = x;
     }
 
-    private void UpdateEmitter3dPosition()      
+    private void UpdateEmitter3dPosition()
     {
-        AmbientEmitter.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(emitterPoint)); 
+        AmbientEmitter.set3DAttributes(FMODUnity.RuntimeUtils.To3DAttributes(emitterPoint));
     }
 
     private void OnDrawGizmos()                 //This part simply allows us to see the emitter point in Unity with Gizmos enabled
