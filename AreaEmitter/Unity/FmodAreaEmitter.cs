@@ -49,10 +49,6 @@ public class FmodAreaEmitter : MonoBehaviour
                 Debug.LogWarning("FMOD Area Emitter could not detect a colliders on object. Will be disabled now.");
                 GetComponent<FmodAreaEmitter>().enabled = !GetComponent<FmodAreaEmitter>().enabled;
             }
-            if (TryGetComponent<Rigidbody>(out Rigidbody x) == false)
-            {
-                Debug.LogWarning("FMOD Area Emitter could not detect a Rigidbody on object. It will work fine, yet add it for better performance while being inside area.");
-            }
         }
         else if (emitterCollider == null)
         {
